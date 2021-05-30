@@ -1,0 +1,38 @@
+---
+- hosts: app
+  tasks:
+  - name: Install docker
+    apt:
+      name: docker
+      state: present
+      update_cache: yes
+
+  - name: Install conntrack
+    apt:
+      name: conntrack
+      state: present
+      update_cache: yes
+
+  - name: Install kubectl
+    snap:
+      name: kubectl
+      state: present
+      classic: yes
+
+  - name: clone infra reporsitory
+    ansible.builtin.git:
+      repo: 'https://github.com/VenkataSaiRahulSunkari/bussr-rahul-infra.git'
+      dest: /tmp/bussr-rahul-infra
+      clone: yes
+      update: no
+      version: main
+    
+  - name: Give permissions to install_minikube.sh
+    ansible.builtin.file:
+      path: /tmp/bussr-rahul-infra/install_minikube.sh
+      owner: root
+      group: root
+      mode: '0775'
+
+  - name: Install minikube
+    shell: /tmp/bussr-rahul-infra/install_minikube.sh
