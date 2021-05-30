@@ -4,3 +4,7 @@ data "aws_instance" "app" {
     values = ["app-server"]
   }
 }
+
+output "app-private-ip" {
+  value = data.aws_instance.app.private_ip
+}
